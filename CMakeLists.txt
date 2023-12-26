@@ -737,6 +737,12 @@ set(SOURCES
         monitoring/thread_status_updater.cc
         monitoring/thread_status_util.cc
         monitoring/thread_status_util_debug.cc
+        ycsbcore/acknowledged_counter_generator.cc                   
+        ycsbcore/basic_db.cc                                         
+        ycsbcore/core_workload.cc                                    
+        ycsbcore/db_factory.cc                                       
+        ycsbcore/measurements.cc                                     
+        ycsbcore/ycsbc.cc  
         options/cf_options.cc
         options/configurable.cc
         options/customizable.cc
@@ -896,6 +902,8 @@ set(SOURCES
         utilities/transactions/write_prepared_txn_db.cc
         utilities/transactions/write_unprepared_txn.cc
         utilities/transactions/write_unprepared_txn_db.cc
+        utilities/DOTA/DOTA_tuner.cc
+        utilities/DOTA/report_agent.cc
         utilities/ttl/db_ttl_impl.cc
         utilities/wal_filter.cc
         utilities/write_batch_with_index/write_batch_with_index.cc

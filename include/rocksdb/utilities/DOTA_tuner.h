@@ -6,6 +6,8 @@
 #define ROCKSDB_DOTA_TUNER_H
 #pragma once
 #include <iostream>
+#include "db/version_set.h"
+#include "db/db_impl/db_impl.h"
 
 namespace ROCKSDB_NAMESPACE {
 

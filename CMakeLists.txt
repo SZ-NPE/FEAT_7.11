@@ -737,12 +737,12 @@ set(SOURCES
         monitoring/thread_status_updater.cc
         monitoring/thread_status_util.cc
         monitoring/thread_status_util_debug.cc
-        ycsbcore/acknowledged_counter_generator.cc                   
-        ycsbcore/basic_db.cc                                         
-        ycsbcore/core_workload.cc                                    
-        ycsbcore/db_factory.cc                                       
-        ycsbcore/measurements.cc                                     
-        ycsbcore/ycsbc.cc  
+        # ycsbcore/acknowledged_counter_generator.cc                   
+        # ycsbcore/basic_db.cc                                         
+        # ycsbcore/core_workload.cc                                    
+        # ycsbcore/db_factory.cc                                       
+        # ycsbcore/measurements.cc                                     
+        # ycsbcore/ycsbc.cc  
         options/cf_options.cc
         options/configurable.cc
         options/customizable.cc
@@ -1103,11 +1103,11 @@ endif()
 
 option(WITH_JNI "build with JNI" OFF)
 # Tests are excluded from Release builds
-CMAKE_DEPENDENT_OPTION(WITH_TESTS "build with tests" ON
+CMAKE_DEPENDENT_OPTION(WITH_TESTS "build with tests" OFF
   "CMAKE_BUILD_TYPE STREQUAL Debug" OFF)
-option(WITH_BENCHMARK_TOOLS "build with benchmarks" ON)
-option(WITH_CORE_TOOLS "build with ldb and sst_dump" ON)
-option(WITH_TOOLS "build with tools" ON)
+option(WITH_BENCHMARK_TOOLS "build with benchmarks" OFF)
+option(WITH_CORE_TOOLS "build with ldb and sst_dump" OFF)
+option(WITH_TOOLS "build with tools" OFF)
 
 if(WITH_TESTS OR WITH_BENCHMARK_TOOLS OR WITH_TOOLS OR WITH_JNI OR JNI)
   include_directories(SYSTEM ${PROJECT_SOURCE_DIR}/third-party/gtest-1.8.1/fused-src)
@@ -1479,45 +1479,45 @@ if(WITH_TESTS)
   endif()
 endif()
 
-if(WITH_BENCHMARK_TOOLS)
-  add_executable(db_bench${ARTIFACT_SUFFIX}
-    tools/simulated_hybrid_file_system.cc
-    tools/db_bench.cc
-    tools/db_bench_tool.cc)
-  target_link_libraries(db_bench${ARTIFACT_SUFFIX}
-    ${ROCKSDB_LIB} ${THIRDPARTY_LIBS})
+# if(WITH_BENCHMARK_TOOLS)
+#   add_executable(db_bench${ARTIFACT_SUFFIX}
+#     tools/simulated_hybrid_file_system.cc
+#     tools/db_bench.cc
+#     tools/db_bench_tool.cc)
+#   target_link_libraries(db_bench${ARTIFACT_SUFFIX}
+#     ${ROCKSDB_LIB} ${THIRDPARTY_LIBS})
 
-  add_executable(cache_bench${ARTIFACT_SUFFIX}
-    cache/cache_bench.cc
-    cache/cache_bench_tool.cc)
-  target_link_libraries(cache_bench${ARTIFACT_SUFFIX}
-    ${ROCKSDB_LIB} ${GFLAGS_LIB})
+#   add_executable(cache_bench${ARTIFACT_SUFFIX}
+#     cache/cache_bench.cc
+#     cache/cache_bench_tool.cc)
+#   target_link_libraries(cache_bench${ARTIFACT_SUFFIX}
+#     ${ROCKSDB_LIB} ${GFLAGS_LIB})
 
-  add_executable(memtablerep_bench${ARTIFACT_SUFFIX}
-    memtable/memtablerep_bench.cc)
-  target_link_libraries(memtablerep_bench${ARTIFACT_SUFFIX}
-    ${ROCKSDB_LIB} ${GFLAGS_LIB})
+#   add_executable(memtablerep_bench${ARTIFACT_SUFFIX}
+#     memtable/memtablerep_bench.cc)
+#   target_link_libraries(memtablerep_bench${ARTIFACT_SUFFIX}
+#     ${ROCKSDB_LIB} ${GFLAGS_LIB})
 
-  add_executable(range_del_aggregator_bench${ARTIFACT_SUFFIX}
-    db/range_del_aggregator_bench.cc)
-  target_link_libraries(range_del_aggregator_bench${ARTIFACT_SUFFIX}
-    ${ROCKSDB_LIB} ${GFLAGS_LIB})
+#   add_executable(range_del_aggregator_bench${ARTIFACT_SUFFIX}
+#     db/range_del_aggregator_bench.cc)
+#   target_link_libraries(range_del_aggregator_bench${ARTIFACT_SUFFIX}
+#     ${ROCKSDB_LIB} ${GFLAGS_LIB})
 
-  add_executable(table_reader_bench${ARTIFACT_SUFFIX}
-    table/table_reader_bench.cc)
-  target_link_libraries(table_reader_bench${ARTIFACT_SUFFIX}
-    ${ROCKSDB_LIB} testharness ${GFLAGS_LIB})
+#   add_executable(table_reader_bench${ARTIFACT_SUFFIX}
+#     table/table_reader_bench.cc)
+#   target_link_libraries(table_reader_bench${ARTIFACT_SUFFIX}
+#     ${ROCKSDB_LIB} testharness ${GFLAGS_LIB})
 
-  add_executable(filter_bench${ARTIFACT_SUFFIX}
-    util/filter_bench.cc)
-  target_link_libraries(filter_bench${ARTIFACT_SUFFIX}
-    ${ROCKSDB_LIB} ${GFLAGS_LIB})
+#   add_executable(filter_bench${ARTIFACT_SUFFIX}
+#     util/filter_bench.cc)
+#   target_link_libraries(filter_bench${ARTIFACT_SUFFIX}
+#     ${ROCKSDB_LIB} ${GFLAGS_LIB})
 
-  add_executable(hash_table_bench${ARTIFACT_SUFFIX}
-    utilities/persistent_cache/hash_table_bench.cc)
-  target_link_libraries(hash_table_bench${ARTIFACT_SUFFIX}
-    ${ROCKSDB_LIB} ${GFLAGS_LIB})
-endif()
+#   add_executable(hash_table_bench${ARTIFACT_SUFFIX}
+#     utilities/persistent_cache/hash_table_bench.cc)
+#   target_link_libraries(hash_table_bench${ARTIFACT_SUFFIX}
+#     ${ROCKSDB_LIB} ${GFLAGS_LIB})
+# endif()
 
 option(WITH_TRACE_TOOLS "build with trace tools" ON)
 if(WITH_TRACE_TOOLS)

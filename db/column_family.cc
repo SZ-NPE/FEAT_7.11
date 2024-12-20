@@ -923,6 +923,18 @@ WriteStallCondition ColumnFamilyData::RecalculateWriteStallConditions(
     bool was_stopped = write_controller->IsStopped();
     bool needed_delay = write_controller->NeedsDelay();
 
+#ifdef DB_STATS_RECORD
+    ROCKS_LOG_INFO(ioptions_.logger,
+                   "[DB STATS] num_not_flushed: %d l0_delay_trigger_count: %d "
+                   "estimated_compaction_needed_bytes: %" PRIu64,
+                   imm()->NumNotFlushed(), vstorage->l0_delay_trigger_count(),
+                   vstorage->estimated_compaction_needed_bytes());
+    if (write_controller_token_) {
+      ROCKS_LOG_INFO(ioptions_.logger,
+                     "[DB STATS] write_controller_token_ recalculate");
+    }
+#endif
+
     if (write_stall_condition == WriteStallCondition::kStopped &&
         write_stall_cause == WriteStallCause::kMemtableLimit) {
       write_controller_token_ = write_controller->GetStopToken();

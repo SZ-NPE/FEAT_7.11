@@ -599,6 +599,10 @@ Status CompactionJob::Run() {
     thread.join();
   }
 
+#ifdef DB_STATS_RECORD
+  const uint64_t end_micros = db_options_.clock->NowMicros();
+#endif
+
   compaction_stats_.SetMicros(db_options_.clock->NowMicros() - start_micros);
 
   for (auto& state : compact_->sub_compact_states) {
@@ -759,6 +763,17 @@ Status CompactionJob::Run() {
   compact_->AggregateCompactionStats(compaction_stats_, *compaction_job_stats_);
   UpdateCompactionStats();
 
+#ifdef DB_STATS_RECORD
+  ROCKS_LOG_INFO(db_options_.info_log,
+                 "[DB STATS] Compaction run begin: %" PRIu64 " end: %" PRIu64
+                 " from: %d to: %d write: %" PRIu64 " throughput: %.2f MB/s",
+                 start_micros / 1000000, end_micros / 1000000,
+                 compact_->compaction->start_level(),
+                 compact_->compaction->output_level(),
+                 compaction_stats_.stats.bytes_written,
+                 (compaction_stats_.stats.bytes_written / 1024.0 / 1024.0) /
+                     ((end_micros - start_micros) / 1000000.0));
+#endif
   RecordCompactionIOStats();
   LogFlush(db_options_.info_log);
   TEST_SYNC_POINT("CompactionJob::Run():End");

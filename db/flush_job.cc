@@ -1017,6 +1017,9 @@ Status FlushJob::WriteLevel0Table() {
 
   // Note that here we treat flush as level 0 compaction in internal stats
   InternalStats::CompactionStats stats(CompactionReason::kFlush, 1);
+#ifdef DB_STATS_RECORD
+  const uint64_t end_micros = clock_->NowMicros();
+#endif
   const uint64_t micros = clock_->NowMicros() - start_micros;
   const uint64_t cpu_micros = clock_->CPUMicros() - start_cpu_micros;
   stats.micros = micros;
@@ -1027,6 +1030,16 @@ Status FlushJob::WriteLevel0Table() {
                  " microseconds, and %" PRIu64 " cpu microseconds.\n",
                  cfd_->GetName().c_str(), job_context_->job_id, micros,
                  cpu_micros);
+
+#ifdef DB_STATS_RECORD
+  ROCKS_LOG_INFO(db_options_.info_log,
+                 "[DB STATS] Flush run begin: %" PRIu64 " end: %" PRIu64
+                 " write: %" PRIu64 " throughput: %.2f MB/s",
+                 start_micros / 1000000, end_micros / 1000000,
+                 stats.bytes_written,
+                 (stats.bytes_written / 1024.0 / 1024.0) /
+                     ((end_micros - start_micros) / 1000000.0));
+#endif
 
   if (has_output) {
     stats.bytes_written = meta_.fd.GetFileSize();
